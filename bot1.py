@@ -10,7 +10,7 @@ from slackclient import SlackClient
 from newspaper import Article
 import re, string
 import MySQLdb
-
+import pyttsx3
 # starterbot's ID as an environment variable
 BOT_ID = 'U7RHG06GL'
 location = 'https://en.wikipedia.org/wiki/Machine_learning'
@@ -68,6 +68,9 @@ def parse_slack_output( slack_rtm_output , sentences  ):
                         answer_question ( answer , channel )
                         cur.execute("""INSERT INTO raspunsuri VALUES (%s,%s)""",( answer , output [ 'text' ] ))
                         db.commit()
+                        engine = pyttsx3.init() ;
+                        engine.say( answer ) ;
+                        engine.runAndWait() ;
                         return answer , output [ 'channel' ] , new_location
                 return answer , output ['channel' ] , new_location
     return None , None , None
